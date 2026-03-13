@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡La Aventura del Agua! - Ciclo del Agua</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #e0f7fa;
+            color: #01579b;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #0288d1;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            text-align: center;
+        }
+
+        /* Sección de pasos */
+        .pasos-container {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .paso {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .paso:hover {
+            transform: translateY(-5px);
+        }
+
+        .paso h3 {
+            color: #00796b;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .btn-ver {
+            background-color: #03a9f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .btn-ver:hover {
+            background-color: #0288d1;
+        }
+
+        .animacion {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+        }
+
+        .animacion img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Juego interactivo */
+        .juego-container {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .juego-container h2 {
+            color: #0288d1;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .juego-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .ciclo-imagen {
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .ciclo-imagen img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .lugar-destino {
+            position: absolute;
+            width: 100px;
+            height: 50px;
+            border: 2px dashed #00796b;
+            border-radius: 10px;
+            background-color: rgba(255,255,255,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        #destino-evaporacion { top: 10%; left: 20%; }
+        #destino-condensacion { top: 5%; right: 20%; }
+        #destino-precipitacion { top: 40%; left: 50%; transform: translateX(-50%); }
+        #destino-escurrimiento { bottom: 15%; left: 30%; }
+
+        .etiquetas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .etiqueta {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: grab;
+            user-select: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .etiqueta:hover {
+            background-color: #388e3c;
+        }
+
+        #mensaje-resultado {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Sección de preguntas */
+        .preguntas-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .preguntas-container h2 {
+            color: #0288d1;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pregunta {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-pregunta {
+            background-color: #009688;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-pregunta:hover {
+            background-color: #00796b;
+        }
+
+        .respuesta {
+            display: none;
+            padding: 15px;
+            margin-top: 10px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        /* Curiosidades */
+        .curiosidades-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .curiosidades-container h2 {
+            color: #0288d1;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .curiosidad {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            padding-left: 15px;
+            border-left: 4px solid #03a9f4;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #01579b;
+            font-size: 1rem;
+        }
+
+        /* Iconos de flecha */
+        .flecha {
+            transition: transform 0.3s ease;
+        }
+
+        .girar {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .pasos-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .lugar-destino {
+                width: 80px;
+                height: 40px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>¡La Aventura del Agua! 🚰💧</h1>
+    </header>
+
+    <section class="intro">
+        <p>El ciclo del agua es el recorrido que hace el agua por la Tierra, cambiando de forma pero nunca desapareciendo. ¡Vamos a descubrir sus pasos juntos!</p>
+    </section>
+
+    <!-- Sección de pasos del ciclo -->
+    <section class="pasos-container">
+        <div class="paso">
+            <h3>1. EVAPORACIÓN ☀️</h3>
+            <button class="btn-ver" onclick="mostrarAnimacion('anim-evaporacion')">¡Ver cómo funciona!</button>
+            <p>Cuando el Sol calienta el agua de ríos, lagos y océanos, se transforma en vapor y sube al cielo.</p>
+            <div id="anim-evaporacion" class="animacion">
+                <img src="https://cdn-icons-png.flaticon.com/512/1163/1163661.png" alt="Evaporación: Sol calentando el agua que sube como vapor">
+            </div>
+        </div>
+
+        <div class="paso">
+            <h3>2. CONDENSACIÓN ☁️</h3>
+            <button class="btn-ver" onclick="mostrarAnimacion('anim-condensacion')">¡Ver cómo funciona!</button>
+            <p>El vapor se enfría en las alturas y se convierte en pequeñas gotitas que forman las nubes.</p>
+            <div id="anim-condensacion" class="animacion">
+                <img src="https://cdn-icons-png.flaticon.com/512/1163/1163652.png" alt="Condensación: Vapor formando nubes">
+            </div>
+        </div>
+
+        <div class="paso">
+            <h3>3. PRECIPITACIÓN 🌧️</h3>
+            <button class="btn-ver" onclick="mostrarAnimacion('anim-precipitacion')">¡Ver cómo funciona!</button>
+            <p>Las gotitas de las nubes se juntan y se hacen muy pesadas. Así caen al suelo como lluvia, nieve, aguanieve o granizo.</p>
+            <div id="anim-precipitacion" class="animacion">
+                <img src="https://cdn-icons-png.flaticon.com/512/1163/1163659.png" alt="Precipitación: Lluvia cayendo de las nubes">
+            </div>
+        </div>
+
+        <div class="paso">
+            <h3>4. ESCURRIMIENTO 🌊</h3>
+            <button class="btn-ver" onclick="mostrarAnimacion('anim-escurrimiento')">¡Ver cómo funciona!</button>
+            <p>El agua que cae corre por la tierra hacia ríos y océanos, o se filtra bajo tierra. Allí espera a que el ciclo comience de nuevo.</p>
+            <div id="anim-escurrimiento" class="animacion">
+                <img src="https://cdn-icons-png.flaticon.com/512/1163/1163655.png" alt="Escurrimiento: Agua corriendo hacia ríos y océanos">
+            </div>
+        </div>
+    </section>
+
+    <!-- Juego interactivo -->
+    <section class="juego-container">
+        <h2>🎮 Juego: AYUDA AL AGUA A COMPLETAR SU CICLO</h2>
+        <div class="juego-area">
+            <div class="ciclo-imagen">
+                <img src="https://cdn-icons-png.flaticon.com/512/3648/3648133.png" alt="Esquema del ciclo del agua">
+                <div class="lugar-destino" id="destino-evaporacion" data-correcto="evaporacion">?</div>
+                <div class="lugar-destino" id="destino-condensacion" data-correcto="condensacion">?</div>
+                <div class="lugar-destino" id="destino-precipitacion" data-correcto="precipitacion">?</div>
+                <div class="lugar-destino" id="destino-escurrimiento" data-correcto="escurrimiento">?</div>
+            </div>
+
+            <div class="etiquetas">
+                <div class="etiqueta" draggable="true" data-etiqueta="evaporacion">☀️ Evaporación</div>
+                <div class="etiqueta" draggable="true" data-etiqueta="condensacion">☁️ Condensación</div>
+                <div class="etiqueta" draggable="true" data-etiqueta="precipitacion">🌧️ Precipitación</div>
+                <div class="etiqueta" draggable="true" data-etiqueta="escurrimiento">🌊 Escurrimiento</div>
+            </div>
+        </div>
+        <div id="mensaje-resultado"></div>
+    </section>
+
+    <!-- Sección de preguntas -->
+    <section class="preguntas-container">
+        <h2>📝 Preguntas para repasar</h2>
+        <div class="pregunta">
+            <button class="btn-pregunta" onclick="mostrarRespuesta('resp1')">
+                ¿Qué hace el Sol en el ciclo del agua?
+                <span class="flecha">↓</span>
+            </button>
+            <div id="resp1" class="respuesta">
+                Calienta el agua de océanos, ríos y lagos para que se transforme en vapor y comience la evaporación.
+            </div>
+        </div>
+
+        <div class="pregunta">
+            <button class="btn-pregunta" onclick="mostrarRespuesta('resp2')">
+                ¿Cómo se forman las nubes?
+                <span class="flecha">↓</span>
+            </button>
+            <div id="resp2" class="respuesta">
+                Cuando el vapor de agua sube a las alturas, se enfría y se convierte en pequeñas gotitas líquidas que se juntan para formar las nubes: esto se llama condensación.
+            </div>
+        </div>
+
+        <div class="pregunta">
+            <button class="btn-pregunta" onclick="mostrarRespuesta('resp3')">
+                ¿En qué formas puede llegar el agua a la Tierra en la precipitación?
+                <span class="flecha">↓</span>
+            </button>
+            <div id="resp3" class="respuesta">
+                Puede llegar como lluvia, nieve, aguanieve o granizo: depende de la temperatura en las alturas.
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de curiosidades -->
+    <section class="curiosidades-container">
+        <h2>💡 Curiosidades divertidas</h2>
+        <div class="curiosidad">
+            El agua que bebemos hoy podría ser la misma que bebieron los dinosaurios, porque el ciclo del agua es eterno!
+        </div>
+        <div class="curiosidad">
+            Un 71% de la Tierra está cubierta de agua, pero solo el 2,5% es agua dulce... y de ese poco, solo una parte es potable!
+        </div>
+        <div class="curiosidad">
+            La evaporación no solo pasa de los océanos: también las plantas "sueltan" agua por sus hojas en un proceso llamado transpiración.
+        </div>
+    </section>
+
+    <footer>
+        <p>¡La Aventura del Agua! - Página para niños de 5° grado | 2026</p>
+    </footer>
+
+    <script>
+        // Función para mostrar/ocultar animaciones de pasos
+        function mostrarAnimacion(id) {
+            const animacion = document.getElementById(id);
+            if (animacion.style.display === "none" || animacion.style
